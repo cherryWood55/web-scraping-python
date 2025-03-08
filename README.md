@@ -62,10 +62,9 @@ Go to http://127.0.0.1:5000/ in your browser.
 ```csharp
 - quote-guess-game
  ┣  app.py               # Main Flask application
+ ┣  quotes_scraper.py
  ┣  templates/
  ┃ ┣  index.html         # Frontend UI (HTML & CSS)
- ┣  static/
- ┃ ┣  style.css          # Custom styles (optional)
  ┣  quotes.db            # SQLite database
  ┣  README.md            # Project documentation
 ```
