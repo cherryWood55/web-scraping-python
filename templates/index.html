@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QuoteGuess Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+            background: #f4f4f4;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #333;
+        }
+        .quote {
+            font-size: 20px;
+            margin-bottom: 15px;
+            font-style: italic;
+        }
+        .message {
+            color: green;
+            font-weight: bold;
+        }
+        .hint {
+            color: #555;
+            font-size: 14px;
+        }
+        .score {
+            margin-top: 10px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>QuoteGuess Game</h1>
+        <p class="quote">"{{ quote_text }}"</p>
+
+        <form method="POST">
+            <input type="text" name="guess" placeholder="Enter author's name" required>
+            <button type="submit">Submit</button>
+        </form>
+
+        <p class="message">{{ message }}</p>
+        <p class="hint">{{ hint }}</p>
+
+        <div class="score">
+            <p>✅ Correct: {{ score['correct'] }} | ❌ Incorrect: {{ score['incorrect'] }}</p>
+        </div>
+
+        <form method="POST">
+            <button type="submit" name="new_game">New Quote</button>
+        </form>
+    </div>
+</body>
+</html>
