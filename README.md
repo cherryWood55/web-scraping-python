@@ -6,18 +6,18 @@ This is a simple **Flask-based web app** where users guess the author of a rando
 
 ## Features
 
-✅ **Random Quotes:** Fetches a random quote from an SQLite database  
-✅ **User Guesses:** User tries to guess the author  
-✅ **Progressive Hints:**  
-   - After 1 wrong attempt → First letter of the first and last name  
+ **Random Quotes:** Fetches a random quote from an SQLite database  
+ **User Guesses:** User tries to guess the author  
+ **Progressive Hints:**  
+   - After 1 wrong attempt → First letter of the first name  
    - After 2 wrong attempts → Author’s birth date & place  
    - After 3 wrong attempts → First letter of the last name  
    - After 4 wrong attempts → Reveals the correct answer  
-✅ **Score Tracking:**  
+ **Score Tracking:**  
    - **Correct guesses** are incremented when the user gets the author right  
    - **Incorrect guesses** are incremented when the user guesses incorrectly  
    - **Incorrect attempts reset** when a new quote is loaded  
-✅ **New Quote Option:** Users can start over anytime  
+ **New Quote Option:** Users can start over anytime  
 
 ---
 
