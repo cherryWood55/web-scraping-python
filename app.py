@@ -37,36 +37,41 @@ def home():
         session["score"] = {"correct": 0, "incorrect": 0}
 
     # Fetch a new quote if needed
-    if "quote" not in session:
+    if "quote" not in session or session["quote"] is None:
         session["quote"] = get_random_quote()
         session["hints"] = 0
         session["remaining_guesses"] = 4  # Reset attempts
+        session["incorrect"] = 0  # Reset incorrect guesses
 
     quote = session["quote"]
     message = ""
     hint = ""
+    show_input = True  # Controls whether the textbox is displayed
 
     if request.method == "POST":
         # Handle new game request
         if "new_game" in request.form:
             session.pop("quote", None)
-            session["hints"] = 0
             session["remaining_guesses"] = 4
-            return redirect(url_for("home"))  # ✅ Fix recursion error
+            session["incorrect"] = 0  # Reset incorrect attempts
+            return redirect(url_for("home"))  
 
         # Process user guess
         guess = request.form["guess"].strip().lower()
         if guess == quote[1].lower():
-            message = "🎉 Correct! You guessed the author!"
-            session["score"]["correct"] += 1
-            session.pop("quote", None)
-            return redirect(url_for("home"))  # ✅ Restart with new quote
-        else:
-            session["score"]["incorrect"] += 1
-            session["remaining_guesses"] -= 1
-            message = f"❌ Incorrect. Try again! {session['remaining_guesses']} attempts left."
+            message = "🎉 Congratulations! You guessed it right!"
+            session["score"]["correct"] += 1  # ✅ Increment correct guesses
+            session.pop("quote", None)  # ✅ Get new quote on next request
+            show_input = False  # ✅ Hide input textbox
+            return render_template("index.html", quote_text=quote[0], message=message, correct_answer=quote[1], score=session["score"], show_input=show_input)
 
-            # Provide progressive hints
+        else:
+            session["score"]["incorrect"] += 1  # ✅ Increment incorrect guesses
+            session["remaining_guesses"] -= 1
+            session["incorrect"] += 1  # ✅ Track incorrect guesses
+            message = f"❌ Incorrect! {session['remaining_guesses']} attempts left."
+
+            # Provide hints based on attempts
             if session["remaining_guesses"] == 3:
                 hint = get_author_hint(quote[1])
             elif session["remaining_guesses"] == 2:
@@ -75,16 +80,19 @@ def home():
             elif session["remaining_guesses"] == 1:
                 hint = f"Final hint: Author's last name starts with '{quote[1].split()[-1][0]}'"
             elif session["remaining_guesses"] == 0:
-                message = f"😢 Out of guesses! The correct answer was {quote[1]}."
-                session.pop("quote", None)  # Reset for new game
-                return redirect(url_for("home"))
+                message = f"😢 Sorry, max attempts over! The correct answer was {quote[1]}."
+                session.pop("quote", None)  # ✅ Get new quote on next request
+                session["incorrect"] = 0  # ✅ Reset incorrect guesses for new game
+                show_input = False  # ✅ Hide input textbox
+                return render_template("index.html", quote_text=quote[0], message=message, correct_answer=quote[1], score=session["score"], show_input=show_input)
 
     return render_template(
         "index.html",
         quote_text=quote[0],
         message=message,
         hint=hint,
-        score=session["score"]
+        score=session["score"],
+        show_input=show_input
     )
 
 if __name__ == "__main__":

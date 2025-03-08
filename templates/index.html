@@ -3,20 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>QuoteGuess Game</title>
+    <title>Quote Guessing Game</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: "Arial", sans-serif;
+            background-color: #f8f9fa;
             text-align: center;
             padding: 20px;
         }
         .container {
             max-width: 600px;
             margin: auto;
-            background: #f4f4f4;
+            background: #ffffff;
             padding: 20px;
             border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
         h1 {
             color: #333;
@@ -25,37 +26,77 @@
             font-size: 20px;
             margin-bottom: 15px;
             font-style: italic;
+            color: #555;
         }
         .message {
-            color: green;
+            font-size: 18px;
             font-weight: bold;
+            margin-top: 15px;
+        }
+        .message.correct {
+            color: green;
+        }
+        .message.incorrect {
+            color: red;
         }
         .hint {
-            color: #555;
-            font-size: 14px;
+            color: #007bff;
+            font-size: 16px;
+            margin-top: 10px;
         }
         .score {
             margin-top: 10px;
             font-weight: bold;
+            font-size: 16px;
+            color: #555;
+        }
+        input[type="text"] {
+            width: 80%;
+            padding: 10px;
+            margin-top: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        button {
+            margin-top: 10px;
+            background: #007bff;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        .hidden {
+            display: none;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>QuoteGuess Game</h1>
+        <h1>Guess the Author</h1>
         <p class="quote">"{{ quote_text }}"</p>
 
-        <form method="POST">
-            <input type="text" name="guess" placeholder="Enter author's name" required>
-            <button type="submit">Submit</button>
-        </form>
+        {% if message %}
+            <p class="message {% if 'Congratulations' in message %}correct{% elif 'Incorrect' in message or 'Sorry' in message %}incorrect{% endif %}">{{ message }}</p>
+        {% endif %}
 
-        <p class="message">{{ message }}</p>
-        <p class="hint">{{ hint }}</p>
+        {% if hint %}
+            <p class="hint"><strong>Hint:</strong> {{ hint }}</p>
+        {% endif %}
 
-        <div class="score">
-            <p>✅ Correct: {{ score['correct'] }} | ❌ Incorrect: {{ score['incorrect'] }}</p>
-        </div>
+        <!-- <p class="score">✅ Correct: {{ score.correct }} | ❌ Incorrect: {{ score.incorrect }}</p> -->
+
+        {% if show_input %}
+            <form method="POST">
+                <input type="text" name="guess" placeholder="Enter author's name" required>
+                <button type="submit">Submit</button>
+            </form>
+        {% endif %}
 
         <form method="POST">
             <button type="submit" name="new_game">New Quote</button>
